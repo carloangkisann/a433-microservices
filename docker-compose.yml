@@ -1,0 +1,27 @@
+# Docker Compose version 2
+version: "2"
+services:
+  # Application tier container
+  item-app:
+    # Always restart the container whenever it stops
+    restart: always
+    # Use the image that was pushed to Docker Hub
+    image: macchiato21/item-app:v1
+    # Map port 80 on the host to port 8080 in the container
+    ports:
+      - "80:8080"
+    # Ensure item-app starts after item-db
+    depends_on:
+      - item-db
+  # Database tier container
+  item-db:
+    # Always restart the container whenever it stops
+    restart: always
+    # Use the MongoDB version 3 image from Docker Hub
+    image: mongo:3
+    volumes:
+      # Mount the named volume for the database files
+      - app-db:/data/db
+# Named volume that keeps the database files persistent
+volumes:
+  app-db:
